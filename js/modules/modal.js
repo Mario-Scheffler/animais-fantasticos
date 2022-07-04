@@ -1,23 +1,43 @@
-export default function initModal() {
-  // selecionar no DOM os botoes/itens e colocar em variaveis
-  const botaoAbrir = document.querySelector('[data-modal="abrir"]');
-  const botaoFechar = document.querySelector('[data-modal="fechar"]');
-  const containerModal = document.querySelector('[data-modal="container"]');
+export default class Modal {
+  constructor(openButton, closeButton, containerModal) {
+    this.botaoAbrir = document.querySelector(openButton);
+    this.botaoFechar = document.querySelector(closeButton);
+    this.containerModal = document.querySelector(containerModal);
 
-  function toggleModal(event) {
+    // bind this ao callback para fazer referencia ao objeto da classe
+    this.eventToggleModal = this.eventToggleModal.bind(this);
+    this.cliqueForaModal = this.cliqueForaModal.bind(this);
+  }
+
+  // abr eou fecha o modal
+  toggleModal() {
+    this.containerModal.classList.toggle("ativo");
+  }
+
+  // adiciona o evento de toggle ao modal
+  eventToggleModal(event) {
     event.preventDefault();
-    containerModal.classList.toggle("ativo");
+    this.toggleModal();
   }
 
-  function cliqueForaModal(event) {
-    if (event.target === this) toggleModal(event);
+  // fecha o modal ao clicar do lado de fora
+  cliqueForaModal(event) {
+    if (event.target === this.containerModal) {
+      this.toggleModal();
+    }
   }
 
-  if (botaoAbrir && botaoFechar && containerModal) {
-    // so vai rodar se as 3 condicopes estiverem true
+  // adiciona os eventos aos elementos do modal
+  addModalEvents() {
+    this.botaoAbrir.addEventListener("click", this.eventToggleModal);
+    this.botaoFechar.addEventListener("click", this.eventToggleModal);
+    this.containerModal.addEventListener("click", this.cliqueForaModal);
+  }
 
-    botaoAbrir.addEventListener("click", toggleModal);
-    botaoFechar.addEventListener("click", toggleModal);
-    containerModal.addEventListener("click", cliqueForaModal);
+  init() {
+    if (this.botaoAbrir && this.botaoFechar && this.containerModal) {
+      this.addModalEvents();
+    }
+    return this;
   }
 }
