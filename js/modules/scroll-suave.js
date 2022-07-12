@@ -7,7 +7,7 @@ export default class ScrollSuave {
       this.options = options;
     }
     this.scrollToSection = this.scrollToSection.bind(this);
-    // bind para definir o this "coreto".
+    // bind para definir o this "correto".
   }
 
   scrollToSection(event) {
